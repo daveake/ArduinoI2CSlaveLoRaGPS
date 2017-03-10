@@ -185,11 +185,34 @@ void SetupLoRa()
   setupRFM98();
 }
 
+int FixRSSI(int RawRSSI, int SNR)
+{
+  int RSSI;
+  
+  if (Frequency > 525)
+  {
+    // HF port (band 1)
+    RSSI = RawRSSI - 157;
+  }
+  else
+  {
+    // LF port (Bands 2/3)
+    RSSI = RawRSSI - 164;
+  }
+  
+  if (SNR < 0)
+  {
+    RSSI += SNR/4;
+  }
+  
+  return RSSI;
+}
+
 int LoRaRSSI()
 {
   int CurrentRSSI;
     
-  CurrentRSSI = readRegister(REG_RSSI_CURRENT) - 137;
+  CurrentRSSI = FixRSSI(readRegister(REG_RSSI_CURRENT), 0);
     
   Serial.print("CurrentRSSI=");
   Serial.println(CurrentRSSI);

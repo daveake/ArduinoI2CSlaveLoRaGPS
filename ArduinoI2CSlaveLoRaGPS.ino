@@ -54,7 +54,7 @@ void loop()
     }
     else if (millis() >= Timeout)
     {
-      sprintf(Other, "*%d\n", LoRaRSSI());
+      sprintf(Other, "^%d\n", LoRaRSSI());
       ptr = Other;
       Timeout = millis() + 500L;
     }
